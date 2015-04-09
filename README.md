@@ -12,7 +12,8 @@ screwed cluster state or something.
 
 Provided configuration should be usable out of the box with boot2docker
 that runs on IP `192.168.59.103`. Change IP address in `docker-compose.yml`
-if you have different network configuration.
+if you have different network configuration. On ubuntu you also have to
+change `/usr/local/bin/docker` to `/usr/bin/docker`.
 
 ```
 docker-compose up
