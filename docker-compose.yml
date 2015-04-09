@@ -8,7 +8,7 @@ zk:
 
 master:
   image: mesosphere/mesos-master:0.21.1-1.1.ubuntu1404
-  command: --hostname=192.168.59.103 --zk=zk://127.0.0.1:2181/mesos --quorum=1 --cluster=docker-compose --work_dir=/var/lib/mesos
+  command: --hostname=192.168.59.103 --ip=192.168.59.103 --zk=zk://127.0.0.1:2181/mesos --quorum=1 --cluster=docker-compose --work_dir=/var/lib/mesos
   net: host
 
 slave:
@@ -22,5 +22,5 @@ slave:
 
 marathon:
   image: mesosphere/marathon:v0.8.1
-  command: --hostname boot2docker --master zk://127.0.0.1:2181/mesos --zk zk://127.0.0.1:2181/marathon
+  command: --hostname 192.168.59.103 --master zk://127.0.0.1:2181/mesos --zk zk://127.0.0.1:2181/marathon
   net: host
