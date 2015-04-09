@@ -25,4 +25,6 @@ That's it, use the following URLs:
 
 ## Caveats
 
-With mesos 0.22 docker containers get stuch in `TASK_STAGING` state.
+With mesos 0.22 docker containers get stuch in `TASK_STAGING` state,
+this bug would be fixed in 0.22.1 or when docker compose gets support
+for host pid namespaces, whichever happens first.
