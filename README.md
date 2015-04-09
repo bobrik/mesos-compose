@@ -22,7 +22,7 @@ docker-compose up
 That's it, use the following URLs:
 
 * http://192.168.59.103:5050/ for mesos master UI
-* http://192.168.59.103:8000/ for marathon UI
+* http://192.168.59.103:8080/ for marathon UI
 
 ## Caveats
 
