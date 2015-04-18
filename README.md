@@ -1,6 +1,7 @@
 # Mesos in one command
 
-This is docker compose config inspired by [blog post by Sebastien Goasguen](http://sebgoa.blogspot.com/2015/03/1-command-to-mesos-with-docker-compose.html).
+This is docker compose config inspired by [blog post by Sebastien Goasguen]
+(http://sebgoa.blogspot.com/2015/03/1-command-to-mesos-with-docker-compose.html).
 
 It uses official images from mesosphere and host networking to enable
 interactions with tasks over real network. It also enables docker containerizer.
@@ -15,8 +16,10 @@ that runs on IP `192.168.59.103`. Change IP address in `docker-compose.yml`
 if you have different network configuration. On ubuntu you also have to
 change `/usr/local/bin/docker` to `/usr/bin/docker`.
 
+Run your cluster:
+
 ```
-docker-compose up
+docker-compose up -d
 ```
 
 That's it, use the following URLs:
@@ -24,8 +27,9 @@ That's it, use the following URLs:
 * http://192.168.59.103:5050/ for mesos master UI
 * http://192.168.59.103:8080/ for marathon UI
 
-## Caveats
+To kill your cluster with all the data:
 
-With mesos 0.22 docker containers get stuch in `TASK_STAGING` state,
-this bug would be fixed in 0.22.1 or when docker compose gets support
-for host pid namespaces, whichever happens first.
+```
+docker-compose stop
+docker-compose rm -f -v
+```

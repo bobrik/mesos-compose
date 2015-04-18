@@ -7,14 +7,16 @@ zk:
     ZK_ID: 1
 
 master:
-  image: mesosphere/mesos-master:0.21.1-1.1.ubuntu1404
+  image: mesosphere/mesos-master:0.22.0-1.0.ubuntu1404
   command: --hostname=192.168.59.103 --ip=192.168.59.103 --zk=zk://127.0.0.1:2181/mesos --quorum=1 --cluster=docker-compose --work_dir=/var/lib/mesos
   net: host
 
 slave:
-  image: mesosphere/mesos-slave:0.21.1-1.1.ubuntu1404
+  image: mesosphere/mesos-slave:0.22.0-1.0.ubuntu1404
+  entrypoint: mesos-slave # https://twitter.com/ibobrik/status/589362154735800320
   command: --hostname=192.168.59.103 --ip=192.168.59.103 --containerizers=docker,mesos --master=zk://127.0.0.1:2181/mesos
   net: host
+  pid: host
   volumes:
     - /sys/fs/cgroup:/sys/fs/cgroup
     - /usr/local/bin/docker:/usr/bin/docker
