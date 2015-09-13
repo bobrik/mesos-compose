@@ -1,31 +1,59 @@
 zk:
-  image: bobrik/zookeeper
+  image: jplock/zookeeper:3.4.6
   ports:
    - 2181:2181
-  environment:
-    ZK_CONFIG: tickTime=2000,initLimit=10,syncLimit=5,maxClientCnxns=128,forceSync=no,clientPort=2181
-    ZK_ID: 1
 
 master:
   image: mesosphere/mesos-master:0.23.0-1.0.ubuntu1404
   net: host
   environment:
-    MESOS_ZK: zk://127.0.0.1:2181/mesos
-    MESOS_HOSTNAME: 192.168.59.103
-    MESOS_IP: 192.168.59.103
+    MESOS_ZK: zk://192.168.99.100:2181/mesos
+    MESOS_HOSTNAME: 192.168.99.100
+    MESOS_IP: 192.168.99.100
     MESOS_QUORUM: 1
     MESOS_CLUSTER: docker-compose
     MESOS_WORK_DIR: /var/lib/mesos
 
-slave:
+slave1:
   image: mesosphere/mesos-slave:0.23.0-1.0.ubuntu1404
   net: host
   pid: host
   environment:
-    MESOS_MASTER: zk://127.0.0.1:2181/mesos
-    MESOS_HOSTNAME: 192.168.59.103
-    MESOS_IP: 192.168.59.103
+    MESOS_MASTER: zk://192.168.99.100:2181/mesos
+    MESOS_HOSTNAME: 192.168.99.100
+    MESOS_IP: 192.168.99.100
     MESOS_CONTAINERIZERS: docker,mesos
+    MESOS_PORT: 5051
+  volumes:
+    - /sys/fs/cgroup:/sys/fs/cgroup
+    - /usr/local/bin/docker:/usr/bin/docker
+    - /var/run/docker.sock:/var/run/docker.sock
+
+slave2:
+  image: mesosphere/mesos-slave:0.23.0-1.0.ubuntu1404
+  net: host
+  pid: host
+  environment:
+    MESOS_MASTER: zk://192.168.99.100:2181/mesos
+    MESOS_HOSTNAME: 192.168.99.100
+    MESOS_IP: 192.168.99.100
+    MESOS_CONTAINERIZERS: docker,mesos
+    MESOS_PORT: 5052
+  volumes:
+    - /sys/fs/cgroup:/sys/fs/cgroup
+    - /usr/local/bin/docker:/usr/bin/docker
+    - /var/run/docker.sock:/var/run/docker.sock
+
+slave3:
+  image: mesosphere/mesos-slave:0.23.0-1.0.ubuntu1404
+  net: host
+  pid: host
+  environment:
+    MESOS_MASTER: zk://192.168.99.100:2181/mesos
+    MESOS_HOSTNAME: 192.168.99.100
+    MESOS_IP: 192.168.99.100
+    MESOS_CONTAINERIZERS: docker,mesos
+    MESOS_PORT: 5053
   volumes:
     - /sys/fs/cgroup:/sys/fs/cgroup
     - /usr/local/bin/docker:/usr/bin/docker
@@ -35,6 +63,14 @@ marathon:
   image: mesosphere/marathon:v0.10.1
   net: host
   environment:
-    MARATHON_MASTER: zk://127.0.0.1:2181/mesos
-    MARATHON_ZK: zk://127.0.0.1:2181/marathon
-    MARATHON_HOSTNAME: 192.168.59.103
+    MARATHON_MASTER: zk://192.168.99.100:2181/mesos
+    MARATHON_ZK: zk://192.168.99.100:2181/marathon
+    MARATHON_HOSTNAME: 192.168.99.100
+
+chronos:
+  image: mesosphere/chronos:chronos-2.4.0-0.1.20150828104228.ubuntu1404-mesos-0.23.0-1.0.ubuntu1404
+  ports:
+    - "8081:8080"
+  links:
+    - "zk:zk"
+  command: "/usr/bin/chronos --master zk://zk:2181/mesos --zk_hosts zk://zk:2181/mesos"
