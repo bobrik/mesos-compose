@@ -12,7 +12,7 @@ screwed cluster state or something.
 ## Usage
 
 Provided configuration should be usable out of the box with boot2docker
-that runs on IP `192.168.59.103`. Change IP address in `docker-compose.yml`
+that runs on IP `192.168.99.100`. Change IP address in `docker-compose.yml`
 if you have different network configuration. On ubuntu you also have to
 change `/usr/local/bin/docker` to `/usr/bin/docker`.
 
@@ -24,8 +24,9 @@ docker-compose up -d
 
 That's it, use the following URLs:
 
-* http://192.168.59.103:5050/ for mesos master UI
-* http://192.168.59.103:8080/ for marathon UI
+* http://192.168.99.100:5050/ for mesos master UI
+* http://192.168.99.100:8080/ for marathon UI
+* http://192.168.99.100:8081/ for chronos UI
 
 To kill your cluster with all the data:
 
