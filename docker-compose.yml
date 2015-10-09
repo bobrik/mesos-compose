@@ -7,34 +7,50 @@ zk:
     ZK_ID: 1
 
 master:
-  image: mesosphere/mesos-master:0.23.0-1.0.ubuntu1404
+  image: mesosphere/mesos-master:0.24.1-0.2.35.ubuntu1404
   net: host
   environment:
     MESOS_ZK: zk://127.0.0.1:2181/mesos
-    MESOS_HOSTNAME: 192.168.59.103
-    MESOS_IP: 192.168.59.103
     MESOS_QUORUM: 1
     MESOS_CLUSTER: docker-compose
     MESOS_WORK_DIR: /var/lib/mesos
 
-slave:
-  image: mesosphere/mesos-slave:0.23.0-1.0.ubuntu1404
+slave-one:
+  image: mesosphere/mesos-slave:0.24.1-0.2.35.ubuntu1404
   net: host
   pid: host
   environment:
     MESOS_MASTER: zk://127.0.0.1:2181/mesos
-    MESOS_HOSTNAME: 192.168.59.103
-    MESOS_IP: 192.168.59.103
     MESOS_CONTAINERIZERS: docker,mesos
+    MESOS_PORT: 5051
+    MESOS_RESOURCES: ports(*):[11000-11999]
   volumes:
     - /sys/fs/cgroup:/sys/fs/cgroup
     - /usr/local/bin/docker:/usr/bin/docker
     - /var/run/docker.sock:/var/run/docker.sock
 
+# slave-two:
+#   image: mesosphere/mesos-slave:0.24.1-0.2.35.ubuntu1404
+#   net: host
+#   pid: host
+#   environment:
+#     MESOS_MASTER: zk://127.0.0.1:2181/mesos
+#     MESOS_CONTAINERIZERS: docker,mesos
+#     MESOS_PORT: 5052
+#     MESOS_RESOURCES: ports(*):[12000-12999]
+#   volumes:
+#     - /sys/fs/cgroup:/sys/fs/cgroup
+#     - /usr/local/bin/docker:/usr/bin/docker
+#     - /var/run/docker.sock:/var/run/docker.sock
+
 marathon:
-  image: mesosphere/marathon:v0.10.1
+  image: mesosphere/marathon:v0.11.0
   net: host
   environment:
     MARATHON_MASTER: zk://127.0.0.1:2181/mesos
-    MARATHON_ZK: zk://127.0.0.1:2181/marathon
-    MARATHON_HOSTNAME: 192.168.59.103
+    MARATHON_DECLINE_OFFER_DURATION: 3600000
+
+# chronos:
+#   image: mesosphere/chronos:chronos-2.4.0-0.1.20151007110204.ubuntu1404-mesos-0.24.1-0.2.35.ubuntu1404
+#   command: /usr/bin/chronos run_jar --http_port 8888 --master zk://127.0.0.1:2181/mesos --zk_hosts zk://127.0.0.1:2181/mesos
+#   net: host
