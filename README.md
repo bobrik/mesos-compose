@@ -25,9 +25,9 @@ docker-compose up -d
 
 That's it, use the following URLs:
 
-* http://<docker ip>:5050/ for Mesos master UI
-* http://<docker ip>:8080/ for Marathon UI
-* http://<docker ip>:8888/ for Chronos UI
+* http://$DOCKER_IP:5050/ for Mesos master UI
+* http://$DOCKER_IP:8080/ for Marathon UI
+* http://$DOCKER_IP:8888/ for Chronos UI
 
 To kill your cluster and wipe all state to start fresh:
 
