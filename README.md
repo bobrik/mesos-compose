@@ -9,12 +9,13 @@ interactions with tasks over real network. It also enables docker containerizer.
 No state is persisted between runs so feel free to start over if you
 screwed cluster state or something.
 
-## Usage
+## Versions
 
-Provided configuration should be usable out of the box with boot2docker
-that runs on IP `192.168.59.103`. Change IP address in `docker-compose.yml`
-if you have different network configuration. On ubuntu you also have to
-change `/usr/local/bin/docker` to `/usr/bin/docker`.
+* Mesos 0.24.1
+* Marathon 0.11.0
+* Chronos 2.4.0 (optional)
+
+## Usage
 
 Run your cluster:
 
@@ -24,12 +25,29 @@ docker-compose up -d
 
 That's it, use the following URLs:
 
-* http://192.168.59.103:5050/ for mesos master UI
-* http://192.168.59.103:8080/ for marathon UI
+* http://<docker ip>:5050/ for Mesos master UI
+* http://<docker ip>:8080/ for Marathon UI
+* http://<docker ip>:8888/ for Chronos UI
 
-To kill your cluster with all the data:
+To kill your cluster and wipe all state to start fresh:
 
 ```
 docker-compose stop
 docker-compose rm -f -v
 ```
+
+## Optional services
+
+In `docker-compose.yml` you can uncomment additional containers.
+
+### Second mesos-slave
+
+Uncomment `slave-two` section to get access to the second mesos-slave. Port
+ranges of two mesos-slaves are separated so it shouldn't be an issue.
+
+Note that both slaves share same memory so you might see OOM if you allocate
+and use more memory than your docker host has.
+
+### Chronos
+
+Uncomment `chronos` section to get access to Chronos framework.
