@@ -22,6 +22,7 @@ slave-one:
   environment:
     MESOS_MASTER: zk://127.0.0.1:2181/mesos
     MESOS_CONTAINERIZERS: docker,mesos
+    # MESOS_HOSTNAME: SLAVE_IP_GOES_HERE
     MESOS_PORT: 5051
     MESOS_RESOURCES: ports(*):[11000-11999]
   volumes:
@@ -36,6 +37,7 @@ slave-one:
 #   environment:
 #     MESOS_MASTER: zk://127.0.0.1:2181/mesos
 #     MESOS_CONTAINERIZERS: docker,mesos
+#     # MESOS_HOSTNAME: SLAVE_IP_GOES_HERE
 #     MESOS_PORT: 5052
 #     MESOS_RESOURCES: ports(*):[12000-12999]
 #   volumes:

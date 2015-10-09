@@ -36,6 +36,15 @@ docker-compose stop
 docker-compose rm -f -v
 ```
 
+## Mesos slave IP address
+
+Mesos tasks have `HOST` env variable passed by mesos. The value by default
+is the output of `hostname -s` command. In many environments local hostname
+resolves to 127.0.0.1. This leads to mesos tasks listening on `127.0.0.1`.
+
+To fix this issue, open `docker-compose.yml`, find `SLAVE_IP_GOES_HERE` and
+replace it with the IP address you want your tasks to listen on.
+
 ## Optional services
 
 In `docker-compose.yml` you can uncomment additional containers.
