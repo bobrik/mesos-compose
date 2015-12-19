@@ -11,8 +11,8 @@ screwed cluster state or something.
 
 ## Versions
 
-* Mesos 0.25.0
-* Marathon 0.13.0-RC3
+* Mesos 0.26.0
+* Marathon 0.14.0-RC1
 * Chronos 2.4.0 (optional)
 
 ## Usage
