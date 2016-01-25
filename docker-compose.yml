@@ -46,11 +46,10 @@ slave-one:
 #     - /var/run/docker.sock:/var/run/docker.sock
 
 marathon:
-  image: mesosphere/marathon:v0.14.0-RC1
+  image: mesosphere/marathon:v0.15.0-RC2
   net: host
   environment:
     MARATHON_MASTER: zk://127.0.0.1:2181/mesos
-    MARATHON_DECLINE_OFFER_DURATION: 3600000
 
 # chronos:
 #   image: mesosphere/chronos:chronos-2.4.0-0.1.20151007110204.ubuntu1404-mesos-0.24.1-0.2.35.ubuntu1404
