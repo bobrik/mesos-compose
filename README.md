@@ -12,7 +12,7 @@ screwed cluster state or something.
 ## Versions
 
 * Mesos 0.26.0
-* Marathon 0.14.0-RC1
+* Marathon 0.15.0-RC3
 * Chronos 2.4.0 (optional)
 
 ## Usage
