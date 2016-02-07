@@ -1,0 +1,19 @@
+id: /example
+apps:
+  - id: where
+    cpus: 0.1
+    mem: 32
+    ports:
+      - 0
+    instances: 2
+    container:
+      type: DOCKER
+      docker:
+        image: bobrik/mesos-where-am-i
+    healthChecks:
+      - protocol: HTTP
+        path: /
+        gracePeriodSeconds: 3
+        intervalSeconds: 10
+        timeoutSeconds: 10
+        maxConsecutiveFailures: 3
