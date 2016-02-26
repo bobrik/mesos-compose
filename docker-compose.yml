@@ -54,7 +54,7 @@ services:
   #     - zk
 
   marathon:
-    image: mesosphere/marathon:v0.15.2
+    image: mesosphere/marathon:v0.15.3
     network_mode: host
     environment:
       MARATHON_MASTER: zk://127.0.0.1:2181/mesos
