@@ -11,7 +11,7 @@ screwed cluster state or something.
 ## Versions
 
 * Mesos 0.27.0
-* Marathon 0.15.1
+* Marathon 0.15.3
 * Chronos 2.4.0 (optional)
 
 Note that you need `docker-compose` 1.6.0 or newer:
