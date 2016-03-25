@@ -10,8 +10,8 @@ screwed cluster state or something.
 
 ## Versions
 
-* Mesos 0.27.0
-* Marathon 0.15.3
+* Mesos 0.28.0
+* Marathon 1.0.0-RC1
 * Chronos 2.4.0 (optional)
 
 Note that you need `docker-compose` 1.6.0 or newer:
