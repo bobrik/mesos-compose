@@ -9,26 +9,29 @@ services:
       ZK_ID: 1
 
   master:
-    image: mesosphere/mesos-master:0.28.0-2.0.16.ubuntu1404
+    image: mesosphere/mesos-master:0.28.1-2.0.20.ubuntu1404
     network_mode: host
     environment:
       MESOS_ZK: zk://127.0.0.1:2181/mesos
       MESOS_QUORUM: 1
       MESOS_CLUSTER: docker-compose
       MESOS_REGISTRY: replicated_log # default is in_memory for some reason
+      MESOS_HOSTNAME: ${DOCKER_IP}
+      LIBPROCESS_IP: ${DOCKER_IP}
     depends_on:
       - zk
 
   slave-one:
-    image: mesosphere/mesos-slave:0.28.0-2.0.16.ubuntu1404
+    image: mesosphere/mesos-slave:0.28.1-2.0.20.ubuntu1404
     network_mode: host
     pid: host
     environment:
       MESOS_MASTER: zk://127.0.0.1:2181/mesos
       MESOS_CONTAINERIZERS: docker,mesos
-      # MESOS_HOSTNAME: SLAVE_IP_GOES_HERE
       MESOS_PORT: 5051
       MESOS_RESOURCES: ports(*):[11000-11999]
+      MESOS_HOSTNAME: ${DOCKER_IP}
+      LIBPROCESS_IP: ${DOCKER_IP}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup
       - /usr/local/bin/docker:/usr/bin/docker
@@ -37,15 +40,16 @@ services:
       - zk
 
   # slave-two:
-  #   image: mesosphere/mesos-slave:0.28.0-2.0.16.ubuntu1404
+  #   image: mesosphere/mesos-slave:0.28.1-2.0.20.ubuntu1404
   #   network_mode: host
   #   pid: host
   #   environment:
   #     MESOS_MASTER: zk://127.0.0.1:2181/mesos
   #     MESOS_CONTAINERIZERS: docker,mesos
-  #     # MESOS_HOSTNAME: SLAVE_IP_GOES_HERE
   #     MESOS_PORT: 5052
   #     MESOS_RESOURCES: ports(*):[12000-12999]
+  #     MESOS_HOSTNAME: ${DOCKER_IP}
+  #     LIBPROCESS_IP: ${DOCKER_IP}
   #   volumes:
   #     - /sys/fs/cgroup:/sys/fs/cgroup
   #     - /usr/local/bin/docker:/usr/bin/docker
@@ -54,7 +58,7 @@ services:
   #     - zk
 
   marathon:
-    image: mesosphere/marathon:v1.0.0-RC1
+    image: mesosphere/marathon:v1.1.1
     network_mode: host
     environment:
       MARATHON_MASTER: zk://127.0.0.1:2181/mesos

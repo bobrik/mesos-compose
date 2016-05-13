@@ -10,8 +10,8 @@ screwed cluster state or something.
 
 ## Versions
 
-* Mesos 0.28.0
-* Marathon 1.0.0-RC1
+* Mesos 0.28.1
+* Marathon 1.1.1
 * Chronos 2.4.0 (optional)
 
 Note that you need `docker-compose` 1.6.0 or newer:
@@ -19,6 +19,17 @@ Note that you need `docker-compose` 1.6.0 or newer:
 * https://github.com/docker/compose
 
 ## Usage
+
+You have to specify `DOCKER_IP` env variable in order to make Mesos work
+properly. The default value is `127.0.0.1` and it should work if you have
+Docker daemon running locally.
+
+If you use `docker-machine` you can do the following, assuming `dev` is your
+machine's name:
+
+```
+export DOCKER_IP=$(docker-machine ip dev)
+```
 
 Run your cluster in the background (equivalent to `docker-compose up -d`):
 
@@ -48,15 +59,6 @@ make destroy
 ```
 
 This is equivalent to issuing `docker-compose stop && docker-compose rm -f -v`.
-
-## Mesos slave IP address
-
-Mesos tasks have `HOST` env variable passed by Mesos. The value by default
-is the output of `hostname -s` command. In many environments local hostname
-resolves to 127.0.0.1. This leads to Mesos tasks listening on `127.0.0.1`.
-
-To fix this issue, open `docker-compose.yml`, find `SLAVE_IP_GOES_HERE` and
-replace it with the IP address you want your tasks to listen on.
 
 ## Task recovery
 
