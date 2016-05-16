@@ -18,6 +18,21 @@ Note that you need `docker-compose` 1.6.0 or newer:
 
 * https://github.com/docker/compose
 
+## Compatibility
+
+This project should work out of the box with docker machine. It requires
+host networking to work, so docker for mac won't work.
+
+If you have docker built dynamically, which is the case on most distros,
+you should download and bind-mount statically linked docker client:
+
+```
+curl -sL https://get.docker.com/builds/Linux/x86_64/docker-1.11.1.tgz | \
+  tar xv --strip-components 1 -C /usr/local/bin
+```
+
+This downloads docker 1.11.1 and installs binaries into `/usr/local/bin`.
+
 ## Usage
 
 You have to specify `DOCKER_IP` env variable in order to make Mesos work
