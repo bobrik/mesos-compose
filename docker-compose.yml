@@ -19,7 +19,7 @@ services:
       MESOS_HOSTNAME: ${DOCKER_IP}
       LIBPROCESS_IP: ${DOCKER_IP}
     volumes:
-      - /home/hcavalle/docker_share/docker.tar.gz:/etc/docker.tar.gz
+      - ./docker.tar.gz:/etc/docker.tar.gz
     depends_on:
       - zk
 
@@ -36,7 +36,7 @@ services:
       LIBPROCESS_IP: ${DOCKER_IP}
       MESOS_WORK_DIR: /tmp/mesos
     volumes:
-      - /home/hcavalle/docker_share/docker.tar.gz:/etc/docker.tar.gz
+      - ./docker.tar.gz:/etc/docker.tar.gz
       - /sys/fs/cgroup:/sys/fs/cgroup
       - /usr/bin/docker:/usr/bin/docker
       - /var/run/docker.sock:/var/run/docker.sock
