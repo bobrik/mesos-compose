@@ -67,7 +67,7 @@ services:
     environment:
       MARATHON_MASTER: zk://127.0.0.1:2181/mesos
     volumes:
-      - /home/hcavalle/docker_share/docker.tar.gz:/etc/docker.tar.gz
+      - ./docker.tar.gz:/etc/docker.tar.gz
     depends_on:
       - zk
 
