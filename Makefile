@@ -33,7 +33,7 @@ stop:
 
 .PHONY: destroy
 destroy: stop
-	docker-compose rm -fv
+	docker-compose rm -f --all
 	[ -z .docker ] || rm -rf .docker
 	[ -z docker.tar.gz ] || rm -rf docker.tar.gz
 
