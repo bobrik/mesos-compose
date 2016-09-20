@@ -1,0 +1,79 @@
+version: "2"
+
+services:
+  zk:
+    image: bobrik/zookeeper
+    network_mode: host
+    environment:
+      ZK_CONFIG: tickTime=2000,initLimit=10,syncLimit=5,maxClientCnxns=128,forceSync=no,clientPort=2181
+      ZK_ID: 1
+
+  mesos-master:
+    image: mesosphere/mesos-master:1.0.0-2.0.89.ubuntu1404
+    network_mode: host
+    environment:
+      MESOS_ZK: zk://127.0.0.1:2181/mesos
+      MESOS_QUORUM: 1
+      MESOS_CLUSTER: docker-compose
+      MESOS_REGISTRY: replicated_log # default is in_memory for some reason
+      MESOS_HOSTNAME: ${DOCKER_IP}
+      LIBPROCESS_IP: ${DOCKER_IP}
+    volumes:
+      - ./docker.tar.gz:/etc/docker.tar.gz
+    depends_on:
+      - zk
+
+  mesos-slave-one:
+    image: mesosphere/mesos-slave:1.0.0-2.0.89.ubuntu1404
+    network_mode: host
+    pid: host
+    environment:
+      MESOS_MASTER: zk://127.0.0.1:2181/mesos
+      MESOS_CONTAINERIZERS: docker,mesos
+      MESOS_PORT: 5051
+      MESOS_RESOURCES: ports(*):[11000-11999]
+      MESOS_HOSTNAME: ${DOCKER_IP}
+      LIBPROCESS_IP: ${DOCKER_IP}
+      MESOS_WORK_DIR: /tmp/mesos
+    volumes:
+      - ./docker.tar.gz:/etc/docker.tar.gz
+      - /sys/fs/cgroup:/sys/fs/cgroup
+      - /usr/bin/docker:/usr/bin/docker
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - zk
+
+  # slave-two:
+  #   image: mesosphere/mesos-slave:1.0.0-2.0.89.ubuntu1404
+  #   network_mode: host
+  #   pid: host
+  #   environment:
+  #     MESOS_MASTER: zk://127.0.0.1:2181/mesos
+  #     MESOS_CONTAINERIZERS: docker,mesos
+  #     MESOS_PORT: 5052
+  #     MESOS_RESOURCES: ports(*):[12000-12999]
+  #     MESOS_HOSTNAME: ${DOCKER_IP}
+  #     LIBPROCESS_IP: ${DOCKER_IP}
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup
+  #     - /usr/local/bin/docker:/usr/bin/docker
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   depends_on:
+  #     - zk
+
+  marathon:
+    image: mesosphere/marathon:v1.2.0-RC6
+    network_mode: host
+    environment:
+      MARATHON_MASTER: zk://127.0.0.1:2181/mesos
+    volumes:
+      - ./docker.tar.gz:/etc/docker.tar.gz
+    depends_on:
+      - zk
+
+  # chronos:
+  #   image: mesosphere/chronos:chronos-2.4.0-0.1.20151007110204.ubuntu1404-mesos-0.24.1-0.2.35.ubuntu1404
+  #   command: /usr/bin/chronos run_jar --http_port 8888 --master zk://127.0.0.1:2181/mesos --zk_hosts zk://127.0.0.1:2181/mesos
+  #   network_mode: host
+  #   depends_on:
+  #     - zk
