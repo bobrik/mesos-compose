@@ -1,7 +1,7 @@
 YAML2JSON = ( python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' 2>/dev/null || ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(ARGF))' )
 MARATHON_CURL = curl -s -X PUT -H "Content-type: application/json" -d @-
 
-DOCKER_IP ?= 127.0.0.1
+DOCKER_IP ?= $(shell docker network inspect bridge | grep Gateway | awk '{print $2}' | sed s/\"//g)
 export DOCKER_IP
 
 .docker:
