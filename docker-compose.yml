@@ -86,6 +86,8 @@ services:
       - zk
       - mesos-master
       - mesos-slave-one
+    expose:
+      - "9000-65500"
     ports:
       - 80:80
       - 8080:8080
