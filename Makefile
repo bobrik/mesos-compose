@@ -4,6 +4,9 @@ MARATHON_CURL = curl -s -X PUT -H "Content-type: application/json" -d @-
 DOCKER_IP ?= $(shell docker network inspect bridge | grep Gateway | awk '{print $2}' | sed s/\"//g)
 export DOCKER_IP
 
+mytest:
+	$(DOCKER_IP)
+
 .docker:
 	[ -d .docker ] || mkdir .docker
 	cp ~/.docker/config.json ./.docker
