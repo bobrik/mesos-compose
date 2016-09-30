@@ -22,7 +22,7 @@ services:
       MESOS_QUORUM: 1
       MESOS_CLUSTER: docker-compose
       MESOS_REGISTRY: replicated_log # default is in_memory for some reason
-      MESOS_HOSTNAME: mesos-master
+      MESOS_HOSTNAME: localhost
       MESOS_LOG_DIR: /var/log/mesos
       MESOS_LOG_: INFO
       MESOS_EXTERNAL_LOG_DIR: /var/log/mesos_external
@@ -45,7 +45,7 @@ services:
       MESOS_CONTAINERIZERS: docker,mesos
       MESOS_PORT: 5051
       MESOS_RESOURCES: ports(*):[11000-11999]
-      MESOS_HOSTNAME: mesos-slave-one
+      MESOS_HOSTNAME: localhost
       MESOS_WORK_DIR: /tmp/mesos
       MESOS_LOG_DIR: /var/log/mesos
       MESOS_LOG_: INFO
