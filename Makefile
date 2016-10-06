@@ -12,7 +12,7 @@ mytest:
 	cp ~/.docker/config.json ./.docker
 
 docker-login:
-	docker login -u="$(DOCKER_USERNAME)" -p="$(DOCKER_PASSWORD)"
+	@docker login -u="$(DOCKER_USERNAME)" -p="$(DOCKER_PASSWORD)"
 
 .PHONY: prepare
 prepare: docker-login .docker
@@ -39,4 +39,3 @@ destroy: stop
 	docker-compose rm -fv
 	[ -z .docker ] || rm -rf .docker
 	[ -z docker.tar.gz ] || rm -rf docker.tar.gz
-
