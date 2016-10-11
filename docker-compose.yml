@@ -1,104 +1,64 @@
 version: "2"
 
+networks:
+  mesos-compose:
+    driver: bridge
+
 services:
   zk:
-    image: bobrik/zookeeper
-    network_mode: bridge
+    extends:
+      file: docker-compose.global.yml
+      service: zk
     ports:
       - 2181:2181
-    environment:
-      ZK_CONFIG: tickTime=2000,initLimit=10,syncLimit=5,maxClientCnxns=128,forceSync=no,clientPort=2181
-      ZK_ID: 1
+    networks:
+      - mesos-compose
 
   mesos-master:
-    image: mesosphere/mesos-master:1.0.0-2.0.89.ubuntu1404
-    network_mode: bridge
-    links:
-      - zk
+    extends:
+      file: docker-compose.global.yml
+      service: mesos-master
+    networks:
+      - mesos-compose
     ports:
       - 5050:5050
-    environment:
-      MESOS_ZK: zk://zk:2181/mesos
-      MESOS_QUORUM: 1
-      MESOS_CLUSTER: docker-compose
-      MESOS_REGISTRY: replicated_log # default is in_memory for some reason
-      MESOS_HOSTNAME: localhost
-      MESOS_LOG_DIR: /var/log/mesos
-      MESOS_LOG_: INFO
-      MESOS_EXTERNAL_LOG_DIR: /var/log/mesos_external
-    volumes:
-      - ./docker.tar.gz:/etc/docker.tar.gz
     depends_on:
       - zk
 
   mesos-slave-one:
-    image: mesosphere/mesos-slave:1.0.0-2.0.89.ubuntu1404
-    network_mode: bridge
-    links:
-      - zk
-      - mesos-master:mesos-master
+    extends:
+      file: docker-compose.global.yml
+      service: mesos-slave
+    networks:
+      - mesos-compose
     ports:
       - 5051:5051
-    pid: host
-    environment:
-      MESOS_MASTER: zk://zk:2181/mesos
-      MESOS_CONTAINERIZERS: docker,mesos
-      MESOS_PORT: 5051
-      MESOS_RESOURCES: ports(*):[11000-11999]
-      MESOS_HOSTNAME: localhost
-      MESOS_WORK_DIR: /tmp/mesos
-      MESOS_LOG_DIR: /var/log/mesos
-      MESOS_LOG_: INFO
-      MESOS_EXTERNAL_LOG_DIR: /var/log/mesos_external
-    volumes:
-      - ./docker.tar.gz:/etc/docker.tar.gz
-      - /sys/fs/cgroup:/sys/fs/cgroup
-      - /usr/bin/docker:/usr/bin/docker
-      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - zk
       - mesos-master
 
-  # slave-two:
-  #   image: mesosphere/mesos-slave:1.0.0-2.0.89.ubuntu1404
-  #   network_mode: bridge
-    #links:
-      #- zk:zk
-      #- mesos-slave-two:mesos-slave-two
+  #mesos-slave-two:
+    #extends:
+      #file: docker-compose.global.yml
+      #service: mesos-slave
+    #networks:
+      #- mesos-compose
     #ports:
-      #- 5050:5050
-  #   pid: host
-  #   environment:
-  #     MESOS_MASTER: zk://127.0.0.1:2181/mesos
-  #     MESOS_CONTAINERIZERS: docker,mesos
-  #     MESOS_PORT: 5052
-  #     MESOS_RESOURCES: ports(*):[12000-12999]
-  #     MESOS_HOSTNAME: ${DOCKER_IP}
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup
-  #     - /usr/local/bin/docker:/usr/bin/docker
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   depends_on:
-  #     - zk
+      #- 5052:5050
+     #depends_on:
+       #- zk
 
   marathon:
-    image: mesosphere/marathon:v1.2.0-RC6
-    network_mode: bridge
-    links:
-      - zk
-      - mesos-master
-      - mesos-slave-one
+    extends:
+      file: docker-compose.global.yml
+      service: marathon
+    networks:
+      - mesos-compose
     expose:
       - "1000-65500"
     ports:
       - 80:80
       - 8080:8080
-    environment:
-      MARATHON_MASTER: zk://zk:2181/mesos 
-      MARATHON_ZK: zk://zk:2181/marathon
-      MARATHON_LOGGING_LEVEL: all
-    volumes:
-      - ./docker.tar.gz:/etc/docker.tar.gz
     depends_on:
       - zk
       - mesos-master
