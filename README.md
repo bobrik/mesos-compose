@@ -13,6 +13,7 @@ screwed cluster state or something.
 * Mesos 1.0.1
 * Marathon 1.3.0
 * Chronos 2.4.0 (optional)
+* Metronome 0.2.0 (optional)
 
 Note that you need `docker-compose` 1.6.0 or newer:
 
@@ -59,6 +60,7 @@ That's it, use the following URLs:
 * http://$DOCKER_IP:5052/ for the second Mesos slave UI
 * http://$DOCKER_IP:8080/ for Marathon UI
 * http://$DOCKER_IP:8888/ for Chronos UI
+* http://$DOCKER_IP:8081/ for Metronome UI (REST API)
 
 If you want to run your cluster in foreground to see logs and be able to stop
 it with Ctrl+C, use the following (equivalent to `docker-compose up`):
@@ -98,6 +100,10 @@ and use more memory than your docker host has.
 ### Chronos
 
 Uncomment `chronos` section to get access to Chronos framework.
+
+### Metronome
+
+Uncomment `metronome` section to get access to Metronome framework.
 
 ## Deploying on marathon
 
