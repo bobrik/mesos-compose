@@ -72,3 +72,15 @@ services:
   #   network_mode: host
   #   depends_on:
   #     - zk
+
+  # metronome:
+  #   image: mesoshq/metronome:0.2.0
+  #   network_mode: host
+  #   environment:
+  #     metronome_mesos_master_url: ${DOCKER_IP}:5050
+  #     metronome_zk_url: zk://127.0.0.1:2181/mesos
+  #     PORT0: 8081
+  #     LIBPROCESS_IP: ${DOCKER_IP}
+  #   depends_on:
+  #     - zk
+  #     - master
